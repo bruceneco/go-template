@@ -1,7 +1,9 @@
 pre-push:
   parallel: true
-  scripts:
+  commands:
     lint:
-      runner: make lint
+      tags: golangci-lint
+      run: make lint
     test:
-      runner: make test
+      tags: run tests
+      run: make test
