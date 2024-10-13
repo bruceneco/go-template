@@ -9,7 +9,8 @@ import (
 )
 
 type EnvConfig struct {
-	GoEnv EnvType `env:"GO_ENV" envDefault:"development"`
+	GoEnv    EnvType `env:"GO_ENV" envDefault:"development"`
+	HTTPPort string  `env:"HTTP_PORT" envDefault:"3000"`
 }
 
 func LoadEnv() *EnvConfig {
