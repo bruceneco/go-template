@@ -3,9 +3,7 @@ pre-push:
   commands:
     lint:
       tags: golangci-lint
-      glob: "*/**/*.go"
       run: make lint
     test:
       tags: run tests
-      glob: "*/**/*_test.go"
       run: make test
