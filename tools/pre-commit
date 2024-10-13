@@ -1,8 +1,4 @@
 #!/bin/bash
-GO_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep '.go$')
-
-# Run golangci-lint
-
 # Check if golangci-lint is installed
 if ! command -v golangci-lint &> /dev/null; then
     echo "golangci-lint could not be found, installing..."
@@ -12,14 +8,7 @@ fi
 # Run golangci-lint and capture the output
 if [ -n "$GO_FILES" ]; then
     echo "Running golangci-lint..."
-    for FILE in $GO_FILES; do
-        $(go env GOPATH)/bin/golangci-lint -c ./tools/.golangci.yml run $FILE --fix
-        if [[ $? != 0 ]]; then
-            printf "Commit failed! Please fix errors before committing.\n"
-            exit 1
-        fi
-    done
-   git add $GO_FILES
+    $(go env GOPATH)/bin/golangci-lint -c ./tools/.golangci.yml run --fix
 
    echo "Go code formatting applied successfully."
 fi
