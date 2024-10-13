@@ -9,3 +9,6 @@ setup-git-hooks:
 
 lint:
 	golangci-lint -c ./tools/.golangci.yml run --fix
+
+run:
+	go run ./cmd/main.go
