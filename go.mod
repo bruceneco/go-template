@@ -1,4 +1,4 @@
-module vocup-api
+module go-template
 
 go 1.23.2
 
