@@ -329,6 +329,8 @@ issues:
   max-same-issues: 50
 
   exclude-rules:
+    - path: module.go
+      linters: [gochecknoglobals]
     - source: "(noinspection|TODO)"
       linters: [ godot ]
     - source: "//noinspection"
