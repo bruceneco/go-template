@@ -4,6 +4,7 @@ setup:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
 	go install github.com/evilmartians/lefthook@latest
 	lefthook install
+	git config --local core.hooksPath .git/hooks
 
 lint:
 	golangci-lint -c ./tools/.golangci.yml run --fix
