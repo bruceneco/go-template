@@ -11,8 +11,17 @@ lint:
 	golangci-lint -c ./tools/.golangci.yml run --fix
 
 GO_ENV ?= development
-run:
-	sql-migrate up -config=./tools/db/dbconfig.yml -env=$(GO_ENV)
+run: migrate-up
 	GO_ENV=$(GO_ENV) go run ./cmd/main.go
+
+migrate-up:
+	sql-migrate up -config=./tools/db/dbconfig.yml -env=$(GO_ENV)
+
+migrate-down:
+	sql-migrate down -config=./tools/db/dbconfig.yml -env=$(GO_ENV)
+
+migrate-status:
+	sql-migrate status -config=./tools/db/dbconfig.yml -env=$(GO_ENV)
 test:
 	go test ./...
+
