@@ -19,6 +19,7 @@ func main() {
 		fx.Provide(func() *config.EnvConfig { return env }),
 		fx.WithLogger(fxlogger.WithZerolog(log.Logger)),
 		fx.Invoke(func(envConfig *config.EnvConfig) {
+			fmt.Println(envConfig)
 			fmt.Println(envConfig.GoEnv)
 		}),
 		fx.Invoke(NewExample),
