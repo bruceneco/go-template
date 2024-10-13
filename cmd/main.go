@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"go-template/config"
 	"time"
 
@@ -19,7 +18,7 @@ func main() {
 		fx.Provide(func() *config.EnvConfig { return env }),
 		fx.WithLogger(fxlogger.WithZerolog(log.Logger)),
 		fx.Invoke(func(envConfig *config.EnvConfig) {
-			fmt.Println(envConfig.GoEnv)
+			log.Info().Str("env_mode", envConfig.GoEnv.String())
 		}),
 		fx.Invoke(NewExample),
 	).Run()

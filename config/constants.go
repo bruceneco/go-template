@@ -7,3 +7,7 @@ const (
 	EnvTypeStaging     EnvType = "staging"
 	EnvTypeProduction  EnvType = "production"
 )
+
+func (e *EnvType) String() string {
+	return string(*e)
+}
