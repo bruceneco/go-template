@@ -18,7 +18,7 @@ func main() {
 		fx.Provide(func() *config.EnvConfig { return env }),
 		fx.WithLogger(fxlogger.WithZerolog(log.Logger)),
 		fx.Invoke(func(envConfig *config.EnvConfig) {
-			log.Info().Str("env_mode", envConfig.GoEnv.String())
+			log.Info().Str("env_mode", envConfig.GoEnv.String()).Msgf("env loaded")
 		}),
 		fx.Invoke(NewExample),
 	).Run()
