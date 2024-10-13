@@ -1,0 +1,5 @@
+development:
+  dialect: postgres
+  datasource: dbname=go-template sslmode=disable password=go-template user=go-template
+  dir: tools/db/migrations
+  table: migrations
