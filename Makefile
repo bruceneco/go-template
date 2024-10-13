@@ -22,6 +22,14 @@ migrate-down:
 
 migrate-status:
 	sql-migrate status -config=./tools/db/dbconfig.yml -env=$(GO_ENV)
+
+new-migration:
+	@read -p "Migration name: " NAME; \
+    	if [ -z "$$NAME" ]; then \
+    		echo "Invalid migration name"; \
+    		exit 1; \
+    	fi; \
+    	sql-migrate new -config=./tools/db/dbconfig.yml $$NAME
 test:
 	go test ./...
 
