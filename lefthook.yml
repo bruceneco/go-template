@@ -1,9 +1,12 @@
-pre-push:
+pre-commit:
   parallel: true
   commands:
     lint:
       tags: golangci-lint
       run: make lint
+pre-push:
+  parallel: true
+  commands:
     test:
       tags: run tests
       run: make test
