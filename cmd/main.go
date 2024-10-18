@@ -1,12 +1,13 @@
 package main
 
 import (
-	"context"
 	"go-template/config"
-	"time"
+	"go-template/internal/adapters/db"
+	"go-template/internal/adapters/db/entities"
 
 	"github.com/ipfans/fxlogger"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 
 	"go.uber.org/fx"
 )
@@ -17,25 +18,24 @@ func main() {
 	fx.New(
 		fx.Provide(func() *config.EnvConfig { return env }),
 		fx.WithLogger(fxlogger.WithZerolog(log.Logger)),
-		fx.Invoke(func(envConfig *config.EnvConfig) {
-			log.Info().Str("env_mode", envConfig.GoEnv.String()).Msgf("env loaded")
+		db.Module,
+		fx.Invoke(func(db *gorm.DB) {
+			err := db.Transaction(func(tx *gorm.DB) error {
+				for range 3 {
+					if err := tx.Create(&entities.Example{}).Error; err != nil {
+						return err
+					}
+				}
+				return nil
+			})
+			if err != nil {
+				log.Fatal().Err(err).Msg("failed to create examples in database")
+			}
+			var examples []entities.Example
+			if err = db.Find(&examples).Error; err != nil {
+				log.Fatal().Err(err).Msg("failed to find examples in database")
+			}
+			log.Info().Int("num_entrie", len(examples)).Send()
 		}),
-		fx.Invoke(NewExample),
 	).Run()
-}
-
-func NewExample(lc fx.Lifecycle) {
-	lc.Append(fx.Hook{
-		OnStart: func(_ context.Context) error {
-			log.Info().Msg("Starting example")
-			return nil
-		},
-		OnStop: func(_ context.Context) error {
-			log.Info().Msg("Stopping example")
-			gracefulDelay := 3
-			time.Sleep(time.Duration(gracefulDelay) * time.Second)
-			log.Info().Msg("Stopped example")
-			return nil
-		},
-	})
 }
