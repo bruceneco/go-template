@@ -9,7 +9,9 @@ import (
 )
 
 type EnvConfig struct {
-	GoEnv EnvType `env:"GO_ENV" envDefault:"development"`
+	GoEnv         EnvType `env:"GO_ENV" envDefault:"development"`
+	PostgresDSN   string  `env:"POSTGRES_DSN,required"`
+	DBAutoMigrate bool    `env:"DB_AUTO_MIGRATE" envDefault:"false"`
 }
 
 func LoadEnv() *EnvConfig {
