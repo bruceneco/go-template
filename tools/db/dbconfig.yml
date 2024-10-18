@@ -1,5 +1,5 @@
 development:
   dialect: postgres
-  datasource: dbname=go-template sslmode=disable password=go-template user=go-template
+  datasource: dbname=postgres sslmode=disable user=postgres password=guest
   dir: tools/db/migrations
   table: migrations
