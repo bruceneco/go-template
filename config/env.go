@@ -9,7 +9,8 @@ import (
 )
 
 type EnvConfig struct {
-	GoEnv EnvType `env:"GO_ENV" envDefault:"development"`
+	GoEnv    EnvType `env:"GO_ENV" envDefault:"development"`
+	AMQPHost string  `env:"AMQP_HOST" envDefault:"amqp://guest:guest@localhost"`
 }
 
 func LoadEnv() *EnvConfig {
