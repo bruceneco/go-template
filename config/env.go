@@ -12,6 +12,7 @@ type EnvConfig struct {
 	GoEnv         EnvType `env:"GO_ENV" envDefault:"development"`
 	PostgresDSN   string  `env:"POSTGRES_DSN,required"`
 	DBAutoMigrate bool    `env:"DB_AUTO_MIGRATE" envDefault:"false"`
+	AMQPHost string  `env:"AMQP_HOST" envDefault:"amqp://guest:guest@localhost"`
 }
 
 func LoadEnv() *EnvConfig {

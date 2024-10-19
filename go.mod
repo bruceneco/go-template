@@ -7,7 +7,9 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/ipfans/fxlogger v0.2.0
 	github.com/joho/godotenv v1.5.1
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/rs/zerolog v1.23.0
+	github.com/wagslane/go-rabbitmq v0.14.2
 	go.uber.org/fx v1.23.0
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
