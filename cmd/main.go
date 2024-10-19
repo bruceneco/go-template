@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/ipfans/fxlogger"
-	"github.com/rs/zerolog/log"
 	"go-template/config"
 	"go-template/internal/adapters"
+
+	"github.com/ipfans/fxlogger"
+	"github.com/rs/zerolog/log"
 	"go.uber.org/fx"
 )
 

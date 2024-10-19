@@ -9,17 +9,20 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewConnection(cfg *config.EnvConfig) *gorm.DB {
+type Connection struct {
+	DB *gorm.DB
+}
+
+func NewConnection(cfg *config.EnvConfig) *Connection {
 	db, err := gorm.Open(psql.Open(cfg.PostgresDSN), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to postgres db")
 	}
 	migrate(db, cfg)
-	return db
+	return &Connection{DB: db}
 }
 
 func migrate(db *gorm.DB, cfg *config.EnvConfig) {
-	log.Info().Interface("cfg", cfg)
 	if cfg.DBAutoMigrate {
 		err := db.AutoMigrate(
 			new(entities.Example),
