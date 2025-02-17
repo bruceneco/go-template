@@ -7,12 +7,16 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func SetupLogger(cfg *EnvConfig) zerolog.Logger {
-	switch cfg.GoEnv {
-	case EnvTypeDevelopment:
-		log.Logger = zerolog.New(zerolog.NewConsoleWriter()).With().Timestamp().Logger()
-	case EnvTypeProduction, EnvTypeStaging:
-		log.Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
+func SetupLogger(cfg *EnvConfig) {
+	if cfg == nil {
+		log.Fatal().Msg("config is nil")
+		return
 	}
-	return log.Logger
+
+	switch cfg.GoEnv {
+	case EnvTypeProduction, EnvTypeStaging:
+		log.Logger = zerolog.New(os.Stdout).With().Timestamp().Logger().Level(cfg.LogLevel)
+	case EnvTypeDevelopment, EnvTypeTest:
+		log.Logger = zerolog.New(zerolog.NewConsoleWriter()).With().Timestamp().Logger().Level(cfg.LogLevel)
+	}
 }
