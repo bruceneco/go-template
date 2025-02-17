@@ -1,8 +1,11 @@
 package postgres
 
 import (
+	migrate "github.com/rubenv/sql-migrate"
 	"go-template/config"
-	"go-template/internal/adapters/db/models"
+	"gorm.io/gorm/logger"
+	"path"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	psql "gorm.io/driver/postgres"
@@ -18,17 +21,35 @@ func NewConnection(cfg *config.EnvConfig) *Connection {
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to postgres db")
 	}
-	migrate(db, cfg)
+	if cfg.DBAutoMigrate {
+		runMigrations(cfg, db)
+	}
 	return &Connection{DB: db}
 }
 
-func migrate(db *gorm.DB, cfg *config.EnvConfig) {
-	if cfg.DBAutoMigrate {
-		err := db.AutoMigrate(
-			new(models.Example),
-		)
-		if err != nil {
-			log.Fatal().Err(err).Msg("failed to migrate db schema")
-		}
+func runMigrations(cfg *config.EnvConfig, db *gorm.DB) {
+	migrations := &migrate.FileMigrationSource{
+		Dir: path.Join(cfg.ProjectRoot + "/tools/db/migrations"),
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to get sql db")
+	}
+	n, err := migrate.Exec(sqlDB, "sqlite3", migrations, migrate.Up)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to run migrations")
+	}
+	log.Info().Msgf("Applied %d migrations", n)
+}
+
+func newGormLogger() logger.Interface {
+	return logger.New(
+		&log.Logger,
+		logger.Config{
+			SlowThreshold:             time.Second,
+			IgnoreRecordNotFoundError: true,
+			ParameterizedQueries:      true,
+			Colorful:                  true,
+		},
+	)
 }
