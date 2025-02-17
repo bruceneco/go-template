@@ -1,17 +1,19 @@
 package adapters
 
 import (
-	"go-template/internal/adapters/amqp"
-	"go-template/internal/adapters/db/postgres"
-	"go-template/internal/adapters/http"
+	"github.com/bruceneco/go-template/internal/adapters/amqp"
+	"github.com/bruceneco/go-template/internal/adapters/db"
+	"github.com/bruceneco/go-template/internal/adapters/grpc"
+	"github.com/bruceneco/go-template/internal/adapters/http"
 
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
 	fx.Provide(
-		postgres.NewConnection,
 		amqp.NewConnection,
 	),
+	db.Module,
+	grpc.Module,
 	http.Module,
 )

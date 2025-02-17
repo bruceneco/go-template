@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"go-template/internal/domain/user"
+	"github.com/bruceneco/go-template/internal/domain/user"
 	"go.uber.org/fx"
 )
 

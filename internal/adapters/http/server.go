@@ -2,7 +2,7 @@ package http
 
 import (
 	"context"
-	"go-template/config"
+	"github.com/bruceneco/go-template/config"
 	"time"
 
 	"github.com/gofiber/contrib/fiberzerolog"
@@ -11,13 +11,22 @@ import (
 	"go.uber.org/fx"
 )
 
-func NewHTTPServer(cfg *config.EnvConfig, lc fx.Lifecycle) *fiber.App {
+type App struct {
+	*fiber.App
+}
+
+func NewHTTPServer() *App {
 	maxReadDuration := 5
 	app := fiber.New(fiber.Config{
 		Immutable:   true,
 		ReadTimeout: time.Duration(maxReadDuration) * time.Second,
 	})
 	app.Use(fiberzerolog.New(fiberzerolog.Config{Logger: &log.Logger}))
+
+	return &App{app}
+}
+
+func Serve(lc fx.Lifecycle, app *App, cfg *config.EnvConfig) {
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			go func() {
@@ -32,5 +41,4 @@ func NewHTTPServer(cfg *config.EnvConfig, lc fx.Lifecycle) *fiber.App {
 			return app.ShutdownWithContext(ctx)
 		},
 	})
-	return app
 }

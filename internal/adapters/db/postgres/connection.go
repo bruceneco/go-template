@@ -1,8 +1,8 @@
 package postgres
 
 import (
+	"github.com/bruceneco/go-template/config"
 	migrate "github.com/rubenv/sql-migrate"
-	"go-template/config"
 	"gorm.io/gorm/logger"
 	"path"
 	"time"
@@ -13,18 +13,20 @@ import (
 )
 
 type Connection struct {
-	DB *gorm.DB
+	*gorm.DB
 }
 
 func NewConnection(cfg *config.EnvConfig) *Connection {
-	db, err := gorm.Open(psql.Open(cfg.PostgresDSN), &gorm.Config{})
+	db, err := gorm.Open(psql.Open(cfg.PostgresDSN), &gorm.Config{
+		Logger: newGormLogger(),
+	})
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to connect to postgres db")
 	}
 	if cfg.DBAutoMigrate {
 		runMigrations(cfg, db)
 	}
-	return &Connection{DB: db}
+	return &Connection{db}
 }
 
 func runMigrations(cfg *config.EnvConfig, db *gorm.DB) {
@@ -35,7 +37,7 @@ func runMigrations(cfg *config.EnvConfig, db *gorm.DB) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to get sql db")
 	}
-	n, err := migrate.Exec(sqlDB, "sqlite3", migrations, migrate.Up)
+	n, err := migrate.Exec(sqlDB, "postgres", migrations, migrate.Up)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to run migrations")
 	}

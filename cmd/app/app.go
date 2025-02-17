@@ -1,11 +1,13 @@
 package app
 
 import (
+	"github.com/bruceneco/go-template/config"
+	"github.com/bruceneco/go-template/internal/adapters"
+	"github.com/bruceneco/go-template/internal/adapters/grpc"
+	"github.com/bruceneco/go-template/internal/adapters/http"
+	"github.com/bruceneco/go-template/internal/domain"
 	"github.com/ipfans/fxlogger"
 	"github.com/rs/zerolog/log"
-	"go-template/config"
-	"go-template/internal/adapters"
-	"go-template/internal/domain"
 	"go.uber.org/fx"
 )
 
@@ -24,5 +26,7 @@ func Inject() fx.Option {
 func Start() {
 	fx.New(
 		Inject(),
+		fx.Invoke(http.Serve),
+		fx.Invoke(grpc.Serve),
 	).Run()
 }

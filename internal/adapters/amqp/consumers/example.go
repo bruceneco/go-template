@@ -2,7 +2,7 @@ package consumers
 
 import (
 	"context"
-	"go-template/internal/adapters/amqp"
+	"github.com/bruceneco/go-template/internal/adapters/amqp"
 
 	"github.com/rs/zerolog/log"
 	"github.com/wagslane/go-rabbitmq"

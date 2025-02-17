@@ -2,7 +2,7 @@ package amqp
 
 import (
 	"context"
-	"go-template/config"
+	"github.com/bruceneco/go-template/config"
 
 	"github.com/rs/zerolog/log"
 	"github.com/wagslane/go-rabbitmq"

@@ -1,11 +1,11 @@
 setup:
-	go mod tidy
-	go mod vendor
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
-	go install github.com/evilmartians/lefthook@latest
+	go mod tidy &\
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5 &\
+	go install github.com/evilmartians/lefthook@latest &\
+	go install github.com/rubenv/sql-migrate/...@latest &\
+	wait
 	lefthook install
 	git config --local core.hooksPath .git/hooks
-	go install github.com/rubenv/sql-migrate/...@latest
 
 lint:
 	golangci-lint -c ./tools/.golangci.yml run --fix
@@ -33,3 +33,18 @@ new-migration:
 test:
 	go test ./...
 
+protoc-generate: install-protoc-deps
+	mkdir -p ./internal/adapters/grpc/proto/gen
+	protoc  --proto_path=./internal/adapters/grpc/proto \
+			--go_out=paths=source_relative:./internal/adapters/grpc/proto/gen \
+			--go-grpc_out=paths=source_relative:./internal/adapters/grpc/proto/gen \
+			./internal/adapters/grpc/proto/*.proto \
+			--experimental_allow_proto3_optional
+	protoc-go-inject-tag -input=./internal/adapters/grpc/proto/gen/*.pb.go
+	go mod tidy
+
+install-protoc-deps:
+	go install github.com/favadi/protoc-go-inject-tag@latest &\
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest &\
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest &\
+	wait

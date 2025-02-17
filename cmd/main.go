@@ -1,6 +1,6 @@
 package main
 
-import "go-template/cmd/app"
+import "github.com/bruceneco/go-template/cmd/app"
 
 func main() {
 	app.Start()

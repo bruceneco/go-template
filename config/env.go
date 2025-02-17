@@ -18,6 +18,7 @@ type EnvConfig struct {
 	AMQPHost      string        `env:"AMQP_HOST" envDefault:"amqp://guest:guest@localhost"`
 	HTTPPort      string        `env:"HTTP_PORT" envDefault:"3000"`
 	LogLevel      zerolog.Level `env:"LOG_LEVEL" envDefault:"0"`
+	GRPCPort      string        `env:"GRPC_PORT" envDefault:"50051"`
 	ProjectRoot   string
 }
 

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package user;
+option go_package = "github.com/bruceneco/wheresmycash-api/internal/adapters/grpc/proto";
+import "google/protobuf/empty.proto";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (User) {}
+  rpc GetUser(GetUserRequest) returns (User) {}
+  rpc UpdateUser(User) returns (User) {}
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {}
+}
+
+message CreateUserRequest {
+  string name = 1; // @gotags: validate:"required,min=6,max=100"
+  string email = 2;// @gotags: validate:"required,email"
+  string password = 3; // @gotags: validate: "required,min=8,max=64"
+}
+
+message User {
+  string id = 1; // @gotags: validate:"required,uuid"
+  string name = 2; // @gotags: validate:"required,min=6,max=100"
+  string email = 3; // @gotags: validate:"required,email"
+}
+
+message GetUserRequest {
+  string id = 1; // @gotags: validate:"required,uuid"
+}
+
+message DeleteUserRequest {
+  string id = 1; // @gotags: validate:"required,uuid"
+}
