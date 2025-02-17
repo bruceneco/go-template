@@ -1,7 +1,7 @@
-package entities
+package models
 
 import (
-	"go-template/internal/adapters/db/entities/columns"
+	"go-template/internal/adapters/db/models/columns"
 )
 
 type Example struct {
